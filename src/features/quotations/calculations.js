@@ -1,10 +1,6 @@
 import { roundMoney, toNumber } from '../../utils/money'
 
-/**
- * Gross = qty × unit price
- * Discount amount = gross × discount% / 100
- * Net = gross − discount amount
- */
+/** Gross = qty × unit price; discount is a percentage of gross. */
 export function calculateLineItem(item) {
   const quantity = toNumber(item.quantity)
   const unitPrice = toNumber(item.unit_price ?? item.unitPrice)

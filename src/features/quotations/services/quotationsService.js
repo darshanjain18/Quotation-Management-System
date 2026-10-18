@@ -1,5 +1,7 @@
 import { supabase, supabaseConfigError } from '../../../lib/supabase'
 
+/** Supabase data access for quotations (list/get/upsert/delete + dashboard stats). */
+
 function requireClient() {
   if (!supabase) throw new Error(supabaseConfigError || 'Supabase is not configured')
   return supabase

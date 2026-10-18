@@ -23,9 +23,7 @@ function drawSectionLabel(doc, text, x, y) {
   doc.text(String(text).toUpperCase(), x, y)
 }
 
-/**
- * Generate and download a professional quotation PDF matching the on-screen document.
- */
+/** Build and download a quotation PDF aligned with the on-screen document. */
 export async function exportQuotationPdf(quotation) {
   if (!quotation) throw new Error('Quotation is required')
 
@@ -42,7 +40,7 @@ export async function exportQuotationPdf(quotation) {
   const contentWidth = pageWidth - marginX * 2
   let y = 44
 
-  // Header bar
+  // Brand accent
   doc.setFillColor(15, 159, 133)
   doc.rect(0, 0, pageWidth, 8, 'F')
 
@@ -73,7 +71,6 @@ export async function exportQuotationPdf(quotation) {
   doc.setLineWidth(1)
   doc.line(marginX, y, pageWidth - marginX, y)
 
-  // Customer + details columns
   y = 114
   const leftCol = marginX
   const rightCol = pageWidth / 2 + 12

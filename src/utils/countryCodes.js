@@ -1,4 +1,4 @@
-/** Common dial codes — searchable by country name or code. */
+/** Dial codes used by the phone input (searchable by name or code). */
 export const COUNTRY_CODES = [
   { code: '+91', name: 'India', flag: 'IN' },
   { code: '+1', name: 'United States', flag: 'US' },
@@ -96,16 +96,14 @@ export function searchCountries(query) {
   )
 }
 
-/** Combine dial code + national number for storage. */
+/** Store as `"<dial> <national>"` for display and later parsing. */
 export function composePhone(countryCode, phoneNumber) {
   const digits = String(phoneNumber || '').replace(/\D/g, '')
   if (!digits) return ''
   return `${countryCode || DEFAULT_COUNTRY_CODE} ${digits}`
 }
 
-/**
- * Split a stored phone value into country code + 10-digit national number.
- */
+/** Split a stored phone string into dial code + 10-digit national number. */
 export function parsePhone(value) {
   const raw = String(value || '').trim()
   if (!raw) {
@@ -114,7 +112,7 @@ export function parsePhone(value) {
 
   const digitsOnly = raw.replace(/\D/g, '')
 
-  // Bare 10-digit national numbers default to India.
+  // Bare 10-digit numbers default to India (+91).
   if (!raw.startsWith('+') && digitsOnly.length === 10) {
     return {
       phone_country: DEFAULT_COUNTRY_CODE,
@@ -124,7 +122,6 @@ export function parsePhone(value) {
 
   const sorted = [...COUNTRY_CODES].sort((a, b) => b.code.length - a.code.length)
 
-  // Prefer matches that leave exactly 10 national digits.
   for (const country of sorted) {
     const dialDigits = country.code.replace(/\D/g, '')
     if (!digitsOnly.startsWith(dialDigits)) continue
@@ -137,7 +134,6 @@ export function parsePhone(value) {
     }
   }
 
-  // Fallback: longest prefix match, then default to +91.
   for (const country of sorted) {
     const dialDigits = country.code.replace(/\D/g, '')
     if (digitsOnly.startsWith(dialDigits) && digitsOnly.length > dialDigits.length) {

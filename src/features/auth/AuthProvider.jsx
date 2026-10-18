@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { getSupabaseConfigError, supabase } from '../../lib/supabase'
 import { AuthContext } from './authContext'
 
+/** Provides session state and auth actions to the app tree. */
 export function AuthProvider({ children }) {
   const configError = getSupabaseConfigError()
   const [session, setSession] = useState(null)
@@ -13,6 +14,7 @@ export function AuthProvider({ children }) {
 
     let mounted = true
 
+    // Restore persisted session, then subscribe to further auth changes.
     supabase.auth.getSession().then(({ data }) => {
       if (!mounted) return
       setSession(data.session)

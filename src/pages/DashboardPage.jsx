@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FileText, IndianRupee, Plus, TriangleAlert } from 'lucide-react'
 import { Badge } from '../components/ui/Badge'
@@ -11,6 +11,17 @@ import { deriveQuotationStatus } from '../features/quotations/calculations'
 import { getDashboardStats } from '../features/quotations/services/quotationsService'
 import { formatINR } from '../utils/money'
 
+const SORT_COLUMNS = {
+  number: { getValue: (row) => String(row.quotation_number || '').toLowerCase(), type: 'string' },
+  customer: { getValue: (row) => String(row.customer_name || '').toLowerCase(), type: 'string' },
+  date: { getValue: (row) => row.quotation_date || '', type: 'string' },
+  status: {
+    getValue: (row) => deriveQuotationStatus(row.quotation_date, row.valid_until),
+    type: 'string',
+  },
+  amount: { getValue: (row) => Number(row.total) || 0, type: 'number' },
+}
+
 function formatDate(value) {
   if (!value) return '—'
   return new Date(`${value}T00:00:00`).toLocaleDateString('en-IN', {
@@ -20,10 +31,17 @@ function formatDate(value) {
   })
 }
 
+function compareValues(a, b, type) {
+  if (type === 'number') return a - b
+  return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' })
+}
+
 export function DashboardPage() {
   const navigate = useNavigate()
   const [stats, setStats] = useState(null)
   const [error, setError] = useState('')
+  const [sortKey, setSortKey] = useState('date')
+  const [sortDir, setSortDir] = useState('desc')
 
   useEffect(() => {
     let active = true
@@ -42,6 +60,27 @@ export function DashboardPage() {
       active = false
     }
   }, [])
+
+  const recentRows = useMemo(() => {
+    const rows = stats?.recent ?? []
+    const column = SORT_COLUMNS[sortKey]
+    if (!column) return rows
+
+    const sorted = [...rows].sort((left, right) => {
+      const result = compareValues(column.getValue(left), column.getValue(right), column.type)
+      return sortDir === 'asc' ? result : -result
+    })
+    return sorted
+  }, [stats, sortKey, sortDir])
+
+  function handleSort(key) {
+    if (sortKey === key) {
+      setSortDir((current) => (current === 'asc' ? 'desc' : 'asc'))
+      return
+    }
+    setSortKey(key)
+    setSortDir(key === 'amount' || key === 'date' ? 'desc' : 'asc')
+  }
 
   return (
     <div>
@@ -127,15 +166,39 @@ export function DashboardPage() {
                 <table className="data-table min-w-full text-left text-sm">
                   <thead>
                     <tr>
-                      <th>Number</th>
-                      <th>Customer</th>
-                      <th>Date</th>
-                      <th>Status</th>
-                      <th className="text-right">Amount</th>
+                      {[
+                        { key: 'number', label: 'Number' },
+                        { key: 'customer', label: 'Customer' },
+                        { key: 'date', label: 'Date' },
+                        { key: 'status', label: 'Status' },
+                        { key: 'amount', label: 'Amount', className: 'text-right' },
+                      ].map((column) => (
+                        <th
+                          key={column.key}
+                          className={column.className}
+                          aria-sort={
+                            sortKey === column.key
+                              ? sortDir === 'asc'
+                                ? 'ascending'
+                                : 'descending'
+                              : 'none'
+                          }
+                        >
+                          <button
+                            type="button"
+                            onClick={() => handleSort(column.key)}
+                            className={`w-full cursor-pointer select-none bg-transparent p-0 text-inherit font-semibold text-muted transition hover:text-ink ${
+                              column.className?.includes('text-right') ? 'text-right' : 'text-left'
+                            }`}
+                          >
+                            {column.label}
+                          </button>
+                        </th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {stats.recent.map((row) => {
+                    {recentRows.map((row) => {
                       const status = deriveQuotationStatus(row.quotation_date, row.valid_until)
                       return (
                         <tr key={row.id}>

@@ -1,4 +1,3 @@
-/** Round half-up to 2 decimal places via integer paise. */
 export function roundMoney(value) {
   const n = Number(value)
   if (!Number.isFinite(n)) return 0
@@ -24,9 +23,7 @@ export function formatINR(value) {
   return inrFormatter.format(roundMoney(value))
 }
 
-/**
- * PDF-safe INR text. jsPDF Helvetica cannot render the ₹ glyph reliably.
- */
+/** jsPDF cannot render ₹ reliably; prefix with Rs. instead. */
 export function formatINRForPdf(value) {
   const amount = roundMoney(value)
   const formatted = new Intl.NumberFormat('en-IN', {

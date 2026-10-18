@@ -1,10 +1,9 @@
--- QMS: quotations schema, RLS, and atomic upsert RPC
+-- Quotation Management System
+-- Tables, RLS, money helper, and atomic upsert_quotation RPC.
 
 create extension if not exists "pgcrypto";
 
--- ---------------------------------------------------------------------------
--- Tables
--- ---------------------------------------------------------------------------
+-- Core tables
 
 create table if not exists public.quotations (
   id uuid primary key default gen_random_uuid(),
@@ -45,9 +44,7 @@ create index if not exists quotations_user_created_idx on public.quotations (use
 create index if not exists quotations_user_number_idx on public.quotations (user_id, quotation_number);
 create index if not exists quotation_items_quotation_id_idx on public.quotation_items (quotation_id);
 
--- ---------------------------------------------------------------------------
 -- updated_at trigger
--- ---------------------------------------------------------------------------
 
 create or replace function public.set_updated_at()
 returns trigger
@@ -64,9 +61,7 @@ create trigger quotations_set_updated_at
   before update on public.quotations
   for each row execute function public.set_updated_at();
 
--- ---------------------------------------------------------------------------
 -- RLS
--- ---------------------------------------------------------------------------
 
 alter table public.quotations enable row level security;
 alter table public.quotation_items enable row level security;
@@ -146,9 +141,7 @@ create policy "quotation_items_delete_own"
     )
   );
 
--- ---------------------------------------------------------------------------
--- Money helpers (paise-based rounding to 2 decimals)
--- ---------------------------------------------------------------------------
+-- Rounding helper (2 decimal places)
 
 create or replace function public.round_money(value numeric)
 returns numeric
@@ -158,9 +151,7 @@ as $$
   select round(coalesce(value, 0), 2);
 $$;
 
--- ---------------------------------------------------------------------------
--- Atomic create / update quotation + items
--- ---------------------------------------------------------------------------
+-- Create or update quotation with line items in one transaction
 
 create or replace function public.upsert_quotation(payload jsonb)
 returns uuid
@@ -349,8 +340,8 @@ $$;
 revoke all on function public.upsert_quotation(jsonb) from public, anon;
 grant execute on function public.upsert_quotation(jsonb) to authenticated;
 
--- Direct table writes would let clients set totals without matching line items.
--- Persist only through upsert_quotation; keep select + quotation delete under RLS.
+-- Block direct client inserts/updates so totals cannot be forged outside the RPC.
+-- Select + quotation delete remain available under RLS.
 revoke all on table public.quotations from anon, authenticated;
 revoke all on table public.quotation_items from anon, authenticated;
 grant select on table public.quotations to authenticated;
