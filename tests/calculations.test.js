@@ -132,9 +132,20 @@ describe('validation schema', () => {
     expect(
       quotationSchema.safeParse({
         ...base,
+        items: [{ product_name: 'X', quantity: 1.5, unit_price: 10, discount: 0 }],
+      }).success,
+    ).toBe(false)
+    expect(
+      quotationSchema.safeParse({
+        ...base,
         items: [{ product_name: 'X', quantity: 1, unit_price: -1, discount: 0 }],
       }).success,
     ).toBe(false)
+  })
+
+  it('requires quotation date and at least one product', () => {
+    expect(quotationSchema.safeParse({ ...base, quotation_date: '' }).success).toBe(false)
+    expect(quotationSchema.safeParse({ ...base, items: [] }).success).toBe(false)
   })
 
   it('validates date order', () => {
@@ -156,10 +167,6 @@ describe('validation schema', () => {
     ).toBe(false)
     expect(quotationSchema.safeParse({ ...base, gst_rate: -1 }).success).toBe(false)
     expect(quotationSchema.safeParse({ ...base, gst_rate: 101 }).success).toBe(false)
-  })
-
-  it('requires quotation date', () => {
-    expect(quotationSchema.safeParse({ ...base, quotation_date: '' }).success).toBe(false)
   })
 
   it('requires a full 10-digit phone when phone is entered', () => {

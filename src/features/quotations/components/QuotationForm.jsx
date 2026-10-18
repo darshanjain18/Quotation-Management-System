@@ -172,10 +172,18 @@ export function QuotationForm({
                     <td className="py-3 px-3 min-w-24">
                       <input
                         type="number"
-                        step="0.001"
-                        min="0"
+                        step="1"
+                        min="1"
+                        inputMode="numeric"
                         className="h-11 w-full rounded-xl border border-border px-3 shadow-soft transition hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
-                        {...register(`items.${index}.quantity`)}
+                        {...register(`items.${index}.quantity`, {
+                          setValueAs: (value) => {
+                            if (value === '' || value === null || value === undefined) return ''
+                            const digits = String(value).replace(/[^\d]/g, '')
+                            if (!digits) return ''
+                            return Number.parseInt(digits, 10)
+                          },
+                        })}
                       />
                       {errors.items?.[index]?.quantity ? (
                         <p className="mt-1 text-xs text-danger">{errors.items[index].quantity.message}</p>
@@ -187,7 +195,13 @@ export function QuotationForm({
                         step="0.01"
                         min="0"
                         className="h-11 w-full rounded-xl border border-border px-3 shadow-soft transition hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
-                        {...register(`items.${index}.unit_price`)}
+                        {...register(`items.${index}.unit_price`, {
+                          setValueAs: (value) => {
+                            if (value === '' || value === null || value === undefined) return ''
+                            const n = Number(value)
+                            return Number.isFinite(n) ? n : ''
+                          },
+                        })}
                       />
                       {errors.items?.[index]?.unit_price ? (
                         <p className="mt-1 text-xs text-danger">{errors.items[index].unit_price.message}</p>

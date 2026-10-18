@@ -12,8 +12,13 @@ const optionalEmail = z
 
 const itemSchema = z.object({
   product_name: z.string().trim().min(1, 'Product name is required'),
-  quantity: z.coerce.number().positive('Quantity must be greater than 0'),
-  unit_price: z.coerce.number().min(0, 'Price cannot be negative'),
+  quantity: z.coerce
+    .number({ invalid_type_error: 'Quantity must be greater than 0' })
+    .int('Quantity cannot be a decimal')
+    .positive('Quantity must be greater than 0'),
+  unit_price: z.coerce
+    .number({ invalid_type_error: 'Price cannot be negative' })
+    .min(0, 'Price cannot be negative'),
   discount: z.coerce.number().min(0, 'Discount cannot be negative').max(100, 'Discount cannot exceed 100%'),
 })
 
@@ -25,7 +30,10 @@ export const quotationSchema = z
     phone_country: z.string().trim().min(1).default(DEFAULT_COUNTRY_CODE),
     phone_number: z.string().trim().optional().or(z.literal('')),
     quotation_number: z.string().trim().min(1, 'Quotation number is required'),
-    quotation_date: z.string().min(1, 'Quotation date is required'),
+    quotation_date: z
+      .string({ required_error: 'Quotation date is required' })
+      .trim()
+      .min(1, 'Quotation date is required'),
     valid_until: z.string().optional().or(z.literal('')),
     gst_rate: z.coerce.number().min(0, 'GST cannot be negative').max(100, 'GST cannot exceed 100%'),
     items: z.array(itemSchema).min(1, 'At least one product is required'),
