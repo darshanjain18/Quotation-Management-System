@@ -109,18 +109,6 @@ npm test
 | Quotation date | Required |
 | Valid until | Optional; must be on or after quotation date |
 
-## Sample calculation
-
-| Input | Value |
-|-------|-------|
-| Product | Accounting Software |
-| Quantity | 2 |
-| Unit price | ₹25,000 |
-| Discount | 5% |
-| GST rate | 18% |
-
-**Result:** subtotal ₹47,500 · GST ₹8,550 · total ₹56,050
-
 ## Deployment (Vercel)
 
 1. Push the repository to GitHub (without `.env`).
@@ -129,11 +117,4 @@ npm test
 4. Deploy, then add the production URL to Supabase Auth URL settings.
 5. Smoke-test login, create, edit, view, delete, print, and PDF export.
 
-## Submission
-
-| Item | Value |
-|------|-------|
-| GitHub repository | `https://github.com/YOUR_USER/YOUR_REPO` |
-| Live URL | `https://YOUR_APP.vercel.app` |
-| Test email | your test user email |
-| Test password | your test user password |
+| Live URL | `https://quotation-management-system-4z81.vercel.app/login` |
