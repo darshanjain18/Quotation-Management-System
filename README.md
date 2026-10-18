@@ -143,27 +143,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY=YOUR_ANON_OR_PUBLISHABLE_KEY
 - At least one product is required
 - Quotation date is required
 
-## Assignment calculation example
 
-| Field | Value |
-|-------|-------|
-| Product | Accounting Software |
-| Qty | 2 |
-| Unit price | ₹25,000 |
-| Discount | 5% |
-| Subtotal | ₹47,500 |
-| GST 18% | ₹8,550 |
-| Grand total | ₹56,050 |
 
-## Submission package
-
-| Item | Value |
-|------|-------|
-| GitHub Repository | `https://github.com/YOUR_USER/YOUR_REPO` |
 | Live Vercel URL | `https://YOUR_APP.vercel.app` |
-| Test login email | _(your Supabase Auth test user email)_ |
-| Test login password | _(your Supabase Auth test user password)_ |
 
-## License
-
-Private assignment project.
