@@ -5,13 +5,18 @@ import {
   deriveQuotationStatus,
 } from '../src/features/quotations/calculations'
 import { quotationSchema } from '../src/features/quotations/schemas/quotationSchema'
-import { roundMoney } from '../src/utils/money'
+import { formatINRForPdf, roundMoney } from '../src/utils/money'
 
 describe('money rounding', () => {
   it('rounds to two decimals', () => {
     expect(roundMoney(1.234)).toBe(1.23)
     expect(roundMoney(1.235)).toBe(1.24)
     expect(roundMoney(10.1)).toBe(10.1)
+  })
+
+  it('formats PDF amounts without the rupee glyph', () => {
+    expect(formatINRForPdf(164000)).toBe('Rs. 1,64,000.00')
+    expect(formatINRForPdf(0)).toBe('Rs. 0.00')
   })
 })
 

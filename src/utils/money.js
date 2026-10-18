@@ -23,3 +23,15 @@ const inrFormatter = new Intl.NumberFormat('en-IN', {
 export function formatINR(value) {
   return inrFormatter.format(roundMoney(value))
 }
+
+/**
+ * PDF-safe INR text. jsPDF Helvetica cannot render the ₹ glyph reliably.
+ */
+export function formatINRForPdf(value) {
+  const amount = roundMoney(value)
+  const formatted = new Intl.NumberFormat('en-IN', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount)
+  return `Rs. ${formatted}`
+}
