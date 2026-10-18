@@ -51,11 +51,11 @@ export function QuotationDetailsPage() {
     }
   }
 
-  function handleExportPdf() {
+  async function handleExportPdf() {
     if (!quotation) return
     setExportingPdf(true)
     try {
-      exportQuotationPdf(quotation)
+      await exportQuotationPdf(quotation)
       toast.success('PDF downloaded')
     } catch (err) {
       toast.error(err.message || 'Failed to export PDF')

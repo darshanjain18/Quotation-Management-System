@@ -1,5 +1,3 @@
-import { jsPDF } from 'jspdf'
-import autoTable from 'jspdf-autotable'
 import { formatINR } from '../../../utils/money'
 
 function formatDate(value) {
@@ -21,8 +19,14 @@ export function getQuotationPdfFilename(quotation) {
 /**
  * Generate and download a professional quotation PDF.
  */
-export function exportQuotationPdf(quotation) {
+export async function exportQuotationPdf(quotation) {
   if (!quotation) throw new Error('Quotation is required')
+
+  const [{ jsPDF }, autoTableModule] = await Promise.all([
+    import('jspdf'),
+    import('jspdf-autotable'),
+  ])
+  const autoTable = autoTableModule.default
 
   const doc = new jsPDF({ unit: 'pt', format: 'a4' })
   const marginX = 48
