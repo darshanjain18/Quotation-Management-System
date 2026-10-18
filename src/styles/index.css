@@ -1,11 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Syne:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --font-display: "Syne", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-login: "Manrope", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
   --color-brand-50: #ecfdf8;
   --color-brand-100: #d1faf0;
@@ -192,28 +190,6 @@
 
   .quotation-doc__grand td {
     @apply text-brand-700;
-  }
-}
-
-@layer components {
-  .login-page {
-    font-family: var(--font-login);
-  }
-
-  .login-page .login-display {
-    font-family: var(--font-display);
-    letter-spacing: -0.03em;
-  }
-
-  .login-page .login-title {
-    font-family: var(--font-display);
-    letter-spacing: -0.03em;
-  }
-
-  .login-page label span,
-  .login-page input,
-  .login-page button {
-    font-family: var(--font-login);
   }
 }
 

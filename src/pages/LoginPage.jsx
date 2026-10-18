@@ -55,10 +55,10 @@ export function LoginPage() {
 
       <div className="relative z-10 flex min-h-screen items-center justify-end px-4 py-8 sm:px-8 lg:px-16">
         <div className="hidden max-w-lg text-white lg:mr-auto lg:block lg:pr-10">
-          <div className="login-display flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500 text-xl font-extrabold shadow-lift">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500 text-xl font-extrabold shadow-lift">
             Q
           </div>
-          <h1 className="login-display mt-8 text-4xl font-extrabold xl:text-5xl">
+          <h1 className="mt-8 text-4xl font-extrabold tracking-tight xl:text-5xl">
             Quotation Management System
           </h1>
           <p className="mt-4 max-w-md text-base font-medium leading-relaxed text-slate-200">
@@ -68,18 +68,18 @@ export function LoginPage() {
 
         <div className="w-full max-w-md rounded-3xl border border-white/20 bg-white/95 p-8 shadow-lift backdrop-blur-md sm:p-10">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
-            <div className="login-display flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-base font-extrabold text-white">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-base font-extrabold text-white">
               Q
             </div>
             <div>
-              <div className="login-title text-lg font-extrabold text-ink">QMS</div>
+              <div className="text-lg font-extrabold text-ink">QMS</div>
               <p className="text-xs font-medium text-muted">Quotation Management</p>
             </div>
           </div>
 
           <div className="mb-8">
             <p className="text-sm font-semibold tracking-wide text-brand-700">Welcome back</p>
-            <h2 className="login-title mt-1 text-3xl font-extrabold text-ink">Sign in</h2>
+            <h2 className="mt-1 text-2xl font-bold tracking-tight text-ink">Sign in</h2>
             <p className="mt-2 text-sm font-medium text-muted">Use your workspace email and password.</p>
           </div>
 
