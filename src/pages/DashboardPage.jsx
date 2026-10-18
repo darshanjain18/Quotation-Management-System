@@ -67,39 +67,39 @@ export function DashboardPage() {
       ) : (
         <>
           <div className="mb-6 grid gap-4 md:grid-cols-3">
-            <Card className="p-5">
+            <div className="stat-card">
               <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-brand-50 p-2 text-brand-600">
+                <div className="rounded-2xl bg-brand-50 p-2.5 text-brand-700 ring-1 ring-brand-100">
                   <FileText className="h-5 w-5" />
                 </div>
                 <div>
                   <p className="text-sm text-muted">Total quotations</p>
-                  <p className="text-2xl font-semibold tabular-nums">{stats.totalQuotations}</p>
+                  <p className="text-2xl font-bold tracking-tight tabular-nums">{stats.totalQuotations}</p>
                 </div>
               </div>
-            </Card>
-            <Card className="p-5">
+            </div>
+            <div className="stat-card">
               <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-emerald-50 p-2 text-success">
+                <div className="rounded-2xl bg-slate-100 p-2.5 text-ink ring-1 ring-slate-200">
                   <IndianRupee className="h-5 w-5" />
                 </div>
                 <div>
                   <p className="text-sm text-muted">Total quoted value</p>
-                  <p className="text-2xl font-semibold tabular-nums">{formatINR(stats.totalQuotedValue)}</p>
+                  <p className="text-2xl font-bold tracking-tight tabular-nums">{formatINR(stats.totalQuotedValue)}</p>
                 </div>
               </div>
-            </Card>
-            <Card className="p-5">
+            </div>
+            <div className="stat-card">
               <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-amber-50 p-2 text-amber-700">
+                <div className="rounded-2xl bg-amber-50 p-2.5 text-amber-700 ring-1 ring-amber-100">
                   <TriangleAlert className="h-5 w-5" />
                 </div>
                 <div>
                   <p className="text-sm text-muted">Expired quotations</p>
-                  <p className="text-2xl font-semibold tabular-nums">{stats.expiredCount}</p>
+                  <p className="text-2xl font-bold tracking-tight tabular-nums">{stats.expiredCount}</p>
                 </div>
               </div>
-            </Card>
+            </div>
           </div>
 
           <Card>
@@ -124,34 +124,34 @@ export function DashboardPage() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="min-w-full text-left text-sm">
-                  <thead className="border-b border-border bg-slate-50 text-xs uppercase tracking-wide text-muted">
+                <table className="data-table min-w-full text-left text-sm">
+                  <thead>
                     <tr>
-                      <th className="px-4 py-3 font-medium">Number</th>
-                      <th className="px-4 py-3 font-medium">Customer</th>
-                      <th className="px-4 py-3 font-medium">Date</th>
-                      <th className="px-4 py-3 font-medium">Status</th>
-                      <th className="px-4 py-3 font-medium text-right">Amount</th>
+                      <th>Number</th>
+                      <th>Customer</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th className="text-right">Amount</th>
                     </tr>
                   </thead>
                   <tbody>
                     {stats.recent.map((row) => {
                       const status = deriveQuotationStatus(row.quotation_date, row.valid_until)
                       return (
-                        <tr key={row.id} className="border-b border-border/70">
-                          <td className="px-4 py-3">
-                            <Link className="font-medium text-brand-700 hover:underline" to={`/quotations/${row.id}`}>
+                        <tr key={row.id}>
+                          <td>
+                            <Link className="font-semibold text-brand-700 hover:underline" to={`/quotations/${row.id}`}>
                               {row.quotation_number}
                             </Link>
                           </td>
-                          <td className="px-4 py-3">{row.customer_name}</td>
-                          <td className="px-4 py-3 text-muted">{formatDate(row.quotation_date)}</td>
-                          <td className="px-4 py-3">
+                          <td>{row.customer_name}</td>
+                          <td className="text-muted">{formatDate(row.quotation_date)}</td>
+                          <td>
                             <Badge tone={status === 'expired' ? 'expired' : 'active'}>
                               {status === 'expired' ? 'Expired' : 'Active'}
                             </Badge>
                           </td>
-                          <td className="px-4 py-3 text-right tabular-nums font-medium">
+                          <td className="text-right font-semibold tabular-nums">
                             {formatINR(row.total)}
                           </td>
                         </tr>

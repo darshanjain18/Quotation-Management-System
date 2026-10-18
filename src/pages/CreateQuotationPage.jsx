@@ -11,6 +11,7 @@ import {
   suggestQuotationNumber,
   upsertQuotation,
 } from '../features/quotations/services/quotationsService'
+import { composePhone } from '../utils/countryCodes'
 
 export function CreateQuotationPage() {
   const navigate = useNavigate()
@@ -42,11 +43,14 @@ export function CreateQuotationPage() {
 
   async function handleSubmit(values) {
     const id = await upsertQuotation({
-      ...values,
+      customer_name: values.customer_name,
       company_name: values.company_name || '',
       email: values.email || '',
-      phone: values.phone || '',
+      phone: composePhone(values.phone_country, values.phone_number),
+      quotation_number: values.quotation_number,
+      quotation_date: values.quotation_date,
       valid_until: values.valid_until || null,
+      gst_rate: values.gst_rate,
       items: values.items,
     })
     toast.success('Quotation saved')

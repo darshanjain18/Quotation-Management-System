@@ -107,22 +107,22 @@ export function QuotationsPage() {
         }
       />
 
-      <Card className="mb-4 p-4">
+      <Card className="mb-4 p-4 sm:p-5">
         <div className="grid gap-3 md:grid-cols-[1fr_160px_180px]">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search by number, customer, or company"
-              className="h-10 w-full rounded-lg border border-border bg-white pl-9 pr-3 text-sm"
+              className="h-11 w-full rounded-xl border border-border bg-white pl-10 pr-3 text-sm shadow-soft transition hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
               aria-label="Search quotations"
             />
           </div>
           <select
             value={statusFilter}
             onChange={(event) => setStatusFilter(event.target.value)}
-            className="h-10 rounded-lg border border-border bg-white px-3 text-sm"
+            className="h-11 rounded-xl border border-border bg-white px-3 text-sm shadow-soft transition hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
             aria-label="Filter by status"
           >
             <option value="all">All statuses</option>
@@ -132,7 +132,7 @@ export function QuotationsPage() {
           <select
             value={sortBy}
             onChange={(event) => setSortBy(event.target.value)}
-            className="h-10 rounded-lg border border-border bg-white px-3 text-sm"
+            className="h-11 rounded-xl border border-border bg-white px-3 text-sm shadow-soft transition hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
             aria-label="Sort quotations"
           >
             <option value="newest">Newest first</option>
@@ -164,33 +164,33 @@ export function QuotationsPage() {
       ) : (
         <Card className="overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="border-b border-border bg-slate-50 text-xs uppercase tracking-wide text-muted">
+            <table className="data-table min-w-full text-left text-sm">
+              <thead>
                 <tr>
-                  <th className="px-4 py-3 font-medium">Quotation</th>
-                  <th className="px-4 py-3 font-medium">Customer</th>
-                  <th className="px-4 py-3 font-medium">Date</th>
-                  <th className="px-4 py-3 font-medium">Status</th>
-                  <th className="px-4 py-3 font-medium text-right">Amount</th>
-                  <th className="px-4 py-3 font-medium text-right">Actions</th>
+                  <th>Quotation</th>
+                  <th>Customer</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th className="text-right">Amount</th>
+                  <th className="text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((row) => (
-                  <tr key={row.id} className="border-b border-border/70 hover:bg-slate-50/80">
-                    <td className="px-4 py-3 font-medium text-ink">{row.quotation_number}</td>
-                    <td className="px-4 py-3">
+                  <tr key={row.id}>
+                    <td className="font-semibold text-ink">{row.quotation_number}</td>
+                    <td>
                       <div className="font-medium text-ink">{row.customer_name}</div>
                       {row.company_name ? <div className="text-xs text-muted">{row.company_name}</div> : null}
                     </td>
-                    <td className="px-4 py-3 text-muted">{formatDate(row.quotation_date)}</td>
-                    <td className="px-4 py-3">
+                    <td className="text-muted">{formatDate(row.quotation_date)}</td>
+                    <td>
                       <Badge tone={row.status === 'expired' ? 'expired' : 'active'}>
                         {row.status === 'expired' ? 'Expired' : 'Active'}
                       </Badge>
                     </td>
-                    <td className="px-4 py-3 text-right font-medium tabular-nums">{formatINR(row.total)}</td>
-                    <td className="px-4 py-3">
+                    <td className="text-right font-semibold tabular-nums">{formatINR(row.total)}</td>
+                    <td>
                       <div className="flex justify-end gap-1">
                         <Link to={`/quotations/${row.id}`}>
                           <Button variant="ghost" size="sm" aria-label="View">

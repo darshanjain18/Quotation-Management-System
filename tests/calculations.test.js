@@ -103,7 +103,8 @@ describe('validation schema', () => {
     customer_name: 'Ada',
     company_name: '',
     email: 'ada@example.com',
-    phone: '',
+    phone_country: '+91',
+    phone_number: '',
     quotation_number: 'Q-2026-0001',
     quotation_date: '2026-03-18',
     valid_until: '2026-04-18',
@@ -159,6 +160,12 @@ describe('validation schema', () => {
 
   it('requires quotation date', () => {
     expect(quotationSchema.safeParse({ ...base, quotation_date: '' }).success).toBe(false)
+  })
+
+  it('requires a full 10-digit phone when phone is entered', () => {
+    expect(quotationSchema.safeParse({ ...base, phone_number: '98765' }).success).toBe(false)
+    expect(quotationSchema.safeParse({ ...base, phone_number: '9876543210' }).success).toBe(true)
+    expect(quotationSchema.safeParse({ ...base, phone_number: '' }).success).toBe(true)
   })
 })
 

@@ -1,10 +1,11 @@
 import { useEffect, useMemo } from 'react'
-import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '../../../components/ui/Button'
 import { Input } from '../../../components/ui/Input'
+import { PhoneInput } from '../../../components/ui/PhoneInput'
 import { Card, CardHeader } from '../../../components/ui/Card'
 import { formatINR } from '../../../utils/money'
 import { calculateQuotationTotals } from '../calculations'
@@ -30,9 +31,13 @@ export function QuotationForm({
     register,
     control,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting, isDirty },
     reset,
   } = form
+
+  const phoneCountry = useWatch({ control, name: 'phone_country' })
+  const phoneNumber = useWatch({ control, name: 'phone_number' })
 
   const { fields, append, remove } = useFieldArray({ control, name: 'items' })
   const watchedItems = useWatch({ control, name: 'items' })
@@ -74,7 +79,20 @@ export function QuotationForm({
           <Input label="Customer Name *" error={errors.customer_name?.message} {...register('customer_name')} />
           <Input label="Company Name" error={errors.company_name?.message} {...register('company_name')} />
           <Input label="Email" type="email" error={errors.email?.message} {...register('email')} />
-          <Input label="Phone" error={errors.phone?.message} {...register('phone')} />
+          <input type="hidden" {...register('phone_country')} />
+          <Controller
+            name="phone_number"
+            control={control}
+            render={() => (
+              <PhoneInput
+                countryCode={phoneCountry || '+91'}
+                phoneNumber={phoneNumber || ''}
+                error={errors.phone_number?.message}
+                onCountryChange={(code) => setValue('phone_country', code, { shouldDirty: true, shouldValidate: true })}
+                onPhoneChange={(value) => setValue('phone_number', value, { shouldDirty: true, shouldValidate: true })}
+              />
+            )}
+          />
         </div>
       </Card>
 
@@ -144,7 +162,7 @@ export function QuotationForm({
                   <tr key={field.id} className="border-b border-border/70 align-top">
                     <td className="py-3 pr-3 min-w-52">
                       <input
-                        className="h-10 w-full rounded-lg border border-border px-3"
+                        className="h-11 w-full rounded-xl border border-border px-3 shadow-soft transition hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
                         {...register(`items.${index}.product_name`)}
                       />
                       {errors.items?.[index]?.product_name ? (
@@ -156,7 +174,7 @@ export function QuotationForm({
                         type="number"
                         step="0.001"
                         min="0"
-                        className="h-10 w-full rounded-lg border border-border px-3"
+                        className="h-11 w-full rounded-xl border border-border px-3 shadow-soft transition hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
                         {...register(`items.${index}.quantity`)}
                       />
                       {errors.items?.[index]?.quantity ? (
@@ -168,7 +186,7 @@ export function QuotationForm({
                         type="number"
                         step="0.01"
                         min="0"
-                        className="h-10 w-full rounded-lg border border-border px-3"
+                        className="h-11 w-full rounded-xl border border-border px-3 shadow-soft transition hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
                         {...register(`items.${index}.unit_price`)}
                       />
                       {errors.items?.[index]?.unit_price ? (
@@ -181,7 +199,7 @@ export function QuotationForm({
                         step="0.01"
                         min="0"
                         max="100"
-                        className="h-10 w-full rounded-lg border border-border px-3"
+                        className="h-11 w-full rounded-xl border border-border px-3 shadow-soft transition hover:border-slate-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
                         {...register(`items.${index}.discount`)}
                       />
                       {errors.items?.[index]?.discount ? (

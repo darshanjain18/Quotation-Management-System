@@ -5,6 +5,7 @@ import { PageHeader } from '../components/ui/PageHeader'
 import { Skeleton } from '../components/ui/Skeleton'
 import { QuotationForm } from '../features/quotations/components/QuotationForm'
 import { getQuotation, upsertQuotation } from '../features/quotations/services/quotationsService'
+import { composePhone, parsePhone } from '../utils/countryCodes'
 
 export function EditQuotationPage() {
   const { id } = useParams()
@@ -18,11 +19,13 @@ export function EditQuotationPage() {
       try {
         const data = await getQuotation(id)
         if (!active) return
+        const phoneParts = parsePhone(data.phone)
         setDefaults({
           customer_name: data.customer_name || '',
           company_name: data.company_name || '',
           email: data.email || '',
-          phone: data.phone || '',
+          phone_country: phoneParts.phone_country,
+          phone_number: phoneParts.phone_number,
           quotation_number: data.quotation_number || '',
           quotation_date: data.quotation_date || '',
           valid_until: data.valid_until || '',
@@ -48,11 +51,14 @@ export function EditQuotationPage() {
   async function handleSubmit(values) {
     await upsertQuotation({
       id,
-      ...values,
+      customer_name: values.customer_name,
       company_name: values.company_name || '',
       email: values.email || '',
-      phone: values.phone || '',
+      phone: composePhone(values.phone_country, values.phone_number),
+      quotation_number: values.quotation_number,
+      quotation_date: values.quotation_date,
       valid_until: values.valid_until || null,
+      gst_rate: values.gst_rate,
       items: values.items,
     })
     toast.success('Quotation updated')

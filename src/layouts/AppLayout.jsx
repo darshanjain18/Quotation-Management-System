@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { FileText, LayoutDashboard, LogOut, Menu, PlusCircle, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { useAuth } from '../features/auth/useAuth'
@@ -29,8 +29,10 @@ export function AppLayout() {
   const sidebar = (
     <div className="flex h-full flex-col">
       <div className="border-b border-border px-5 py-5">
-        <div className="text-xl font-bold tracking-tight text-ink">QMS</div>
-        <p className="mt-1 text-xs text-muted">Quotation Management</p>
+        <Link to="/" className="block rounded-lg outline-offset-4" onClick={() => setOpen(false)}>
+          <div className="text-xl font-bold tracking-tight text-ink">QMS</div>
+          <p className="mt-1 text-xs text-muted">Quotation Management</p>
+        </Link>
       </div>
 
       <nav className="flex-1 space-y-1 p-3" aria-label="Main">
@@ -72,19 +74,26 @@ export function AppLayout() {
 
       {open ? (
         <div className="no-print fixed inset-0 z-40 lg:hidden">
-          <button type="button" className="absolute inset-0 bg-slate-900/40" aria-label="Close menu" onClick={() => setOpen(false)} />
+          <button
+            type="button"
+            className="absolute inset-0 bg-slate-900/40"
+            aria-label="Close menu"
+            onClick={() => setOpen(false)}
+          />
           <aside className="relative z-50 h-full w-72 bg-white shadow-xl">{sidebar}</aside>
         </div>
       ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="no-print sticky top-0 z-20 flex items-center justify-between border-b border-border bg-white/95 px-4 py-3 backdrop-blur lg:hidden">
-          <div className="font-semibold text-ink">QMS</div>
+          <Link to="/" className="font-semibold text-ink">
+            QMS
+          </Link>
           <Button variant="ghost" size="sm" onClick={() => setOpen(true)} aria-label="Open menu">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </header>
-        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+        <main className="app-main flex-1 px-4 py-6 sm:px-6 lg:px-8">
           <Outlet />
         </main>
       </div>

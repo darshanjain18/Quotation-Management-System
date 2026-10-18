@@ -19,14 +19,14 @@ export function Dialog({ open, title, description, onClose, children, footer }) 
       <button
         type="button"
         aria-label="Close dialog backdrop"
-        className="absolute inset-0 bg-slate-900/40"
+        className="absolute inset-0 bg-slate-950/45 backdrop-blur-[2px]"
         onClick={onClose}
       />
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialog-title"
-        className="relative z-10 w-full max-w-md rounded-xl border border-border bg-white p-5 shadow-xl"
+        className="relative z-10 w-full max-w-md rounded-2xl border border-border bg-white p-6 shadow-lift"
       >
         <div className="mb-4 flex items-start justify-between gap-3">
           <div>

@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { DEFAULT_COUNTRY_CODE } from '../../../utils/countryCodes'
 
 const optionalEmail = z
   .string()
@@ -21,7 +22,8 @@ export const quotationSchema = z
     customer_name: z.string().trim().min(1, 'Customer name is required'),
     company_name: z.string().trim().optional().or(z.literal('')),
     email: optionalEmail,
-    phone: z.string().trim().optional().or(z.literal('')),
+    phone_country: z.string().trim().min(1).default(DEFAULT_COUNTRY_CODE),
+    phone_number: z.string().trim().optional().or(z.literal('')),
     quotation_number: z.string().trim().min(1, 'Quotation number is required'),
     quotation_date: z.string().min(1, 'Quotation date is required'),
     valid_until: z.string().optional().or(z.literal('')),
@@ -34,6 +36,22 @@ export const quotationSchema = z
         code: z.ZodIssueCode.custom,
         message: 'Valid until cannot be before quotation date',
         path: ['valid_until'],
+      })
+    }
+
+    const digits = String(data.phone_number || '').replace(/\D/g, '')
+    if (digits.length > 0 && digits.length < 10) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Please fill phone number properly (10 digits required)',
+        path: ['phone_number'],
+      })
+    }
+    if (digits.length > 10) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Phone number cannot exceed 10 digits',
+        path: ['phone_number'],
       })
     }
   })
@@ -53,7 +71,8 @@ export function createDefaultQuotationValues() {
     customer_name: '',
     company_name: '',
     email: '',
-    phone: '',
+    phone_country: DEFAULT_COUNTRY_CODE,
+    phone_number: '',
     quotation_number: '',
     quotation_date: today,
     valid_until: '',

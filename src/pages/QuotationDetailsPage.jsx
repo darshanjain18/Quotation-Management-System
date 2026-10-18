@@ -85,37 +85,39 @@ export function QuotationDetailsPage() {
   }
 
   return (
-    <div>
-      <PageHeader
-        title="Quotation Details"
-        description="Professional document view"
-        actions={
-          <div className="no-print flex flex-wrap gap-2">
-            <Button variant="secondary" onClick={() => navigate('/quotations')}>
-              <ArrowLeft className="h-4 w-4" />
-              Back
-            </Button>
-            <Button variant="secondary" onClick={() => window.print()}>
-              <Printer className="h-4 w-4" />
-              Print
-            </Button>
-            <Button variant="secondary" onClick={handleExportPdf} disabled={exportingPdf}>
-              <FileDown className="h-4 w-4" />
-              {exportingPdf ? 'Exporting…' : 'Download PDF'}
-            </Button>
-            <Link to={`/quotations/${id}/edit`}>
-              <Button variant="secondary">
-                <Pencil className="h-4 w-4" />
-                Edit
+    <div className="quotation-details-page">
+      <div className="no-print">
+        <PageHeader
+          title="Quotation Details"
+          description="Professional document view"
+          actions={
+            <div className="flex flex-wrap gap-2">
+              <Button variant="secondary" onClick={() => navigate('/quotations')}>
+                <ArrowLeft className="h-4 w-4" />
+                Back
               </Button>
-            </Link>
-            <Button variant="danger" onClick={() => setConfirmOpen(true)}>
-              <Trash2 className="h-4 w-4" />
-              Delete
-            </Button>
-          </div>
-        }
-      />
+              <Button variant="secondary" onClick={() => window.print()}>
+                <Printer className="h-4 w-4" />
+                Print
+              </Button>
+              <Button variant="secondary" onClick={handleExportPdf} disabled={exportingPdf}>
+                <FileDown className="h-4 w-4" />
+                {exportingPdf ? 'Exporting…' : 'Download PDF'}
+              </Button>
+              <Link to={`/quotations/${id}/edit`}>
+                <Button variant="secondary">
+                  <Pencil className="h-4 w-4" />
+                  Edit
+                </Button>
+              </Link>
+              <Button variant="danger" onClick={() => setConfirmOpen(true)}>
+                <Trash2 className="h-4 w-4" />
+                Delete
+              </Button>
+            </div>
+          }
+        />
+      </div>
 
       <QuotationDocument quotation={quotation} />
 
